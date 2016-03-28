@@ -1,0 +1,16 @@
+BROWN = GND
+
+ORANGE = PWR
+
+BLUE = SCL
+
+GREEN = SDA
+
+
+Top - 3v3
+
+Next - GND
+
+Next - A4 - SDA
+
+Next - A5 - SCL
