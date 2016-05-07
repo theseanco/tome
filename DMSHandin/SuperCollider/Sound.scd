@@ -61,6 +61,11 @@ s.scope
 
 
 
+
+
+
+
+// PRAYER
 (
 //this sets up control
 //FIRST FOUR KNOBS AT ZERO, NINTH KNOB AT FULL
@@ -135,7 +140,9 @@ WAIT FOR CHARLIE TO RETURN TO THE CENTER
 
 ~drn3.play
 
-//TEXT MANIPULATION, using GRANULAR SYNTHESIS
+OSCFunc.trace
+
+//TEXT MANIPULATION, using granular synthesis
 (
 ~warp1 = {arg amp = 2, posx = 0, posy = 0.5, pos = 0.01, rate = 1; Pan2.ar(Warp1.ar(1,d[\tome],pos+LFNoise1.kr(100,0.001),rate,0.2,interp:4),posx,amp)};
 ~warp2 = {arg amp = 2, posx = -0.7, posy = 0.5, pos = 0.01, rate = 1; Pan2.ar(Warp1.ar(1,d[\tome],pos+LFNoise1.kr(100,0.001),rate,0.2,interp:4),posx,amp)};
@@ -175,8 +182,7 @@ OSCdef(\warpz,{|msg| ~warp3.set(\pos,msg[1].linlin(-16000,16000,0,1.0))},'/z');
 
 //water splash
 
-//using the grabbing of d as a function
-//if statement added as a gate, because fuck off gate Ugens
+//runs sensor input through function q in order to grab difference, then modulates amplitude according to difference values
 (
 var prev = 0;
 q = { |in|
@@ -185,19 +191,12 @@ q = { |in|
     result;
 	result = if ( result < 300, {0},{result});
 };
-) //write a circular buffer in here
-
-//grabs the difference in values in the x1 stream
-//x1 works better than x for gestural data, possibly because of higher resolution?
+)
 (
 OSCdef(\xdiff, {|msg| ~splash.set(\amp,q.(msg[1]))},\x1);
 ~splash = {arg amp = 0.7; Pan2.ar(PlayBuf.ar(1,d[\water][2],1,1,0,1,0)*Lag.kr(amp/100,0.5),SinOsc.kr(0.1,0,0.7))};
 ~splash.play;
 )
-
-~splash.stop
-
-OSCFunc.trace(false)
 
 //COMMITTAL
 

@@ -1,40 +1,4 @@
-
-
-
-//instant control of all lights by script. I need to write a bunch of these into a library to do things to Charlie's control of the lights.
-
-//OFF
-(
-b.sendMsg("/l1m/",0);
-b.sendMsg("/l2m/",0);
-b.sendMsg("/l3m/",0);
-b.sendMsg("/l4m/",0);
-)
-
-
-//total control, with master
-(
-OSCdef(\xl, {|msg| b.sendMsg("/l1r/",msg[1].linlin(-14000,14000,-100,255).asInt)},\x);
-OSCdef(\yl, {|msg| b.sendMsg("/l1g/",msg[1].linlin(-14000,14000,-100,255).asInt)},\y);
-OSCdef(\zl, {|msg| b.sendMsg("/l1b/",msg[1].linlin(-14000,14000,-100,255).asInt)},\z);
-OSCdef(\x2, {|msg| b.sendMsg("/l2r/",msg[1].linlin(-14000,14000,-100,255).asInt)},\x);
-OSCdef(\y2, {|msg| b.sendMsg("/l2g/",msg[1].linlin(-14000,14000,-100,255).asInt)},\y);
-OSCdef(\z2, {|msg| b.sendMsg("/l2b/",msg[1].linlin(-14000,14000,-100,255).asInt)},\z);
-OSCdef(\x3, {|msg| b.sendMsg("/l3r/",msg[1].linlin(-14000,14000,-100,255).asInt)},\x);
-OSCdef(\y3, {|msg| b.sendMsg("/l3g/",msg[1].linlin(-14000,14000,-100,255).asInt)},\y);
-OSCdef(\z3, {|msg| b.sendMsg("/l3b/",msg[1].linlin(-14000,14000,-100,255).asInt)},\z);
-OSCdef(\x4, {|msg| b.sendMsg("/l4r/",msg[1].linlin(-14000,14000,-100,255).asInt)},\x);
-OSCdef(\y4, {|msg| b.sendMsg("/l4g/",msg[1].linlin(-14000,14000,-100,255).asInt)},\y);
-OSCdef(\z4, {|msg| b.sendMsg("/l4b/",msg[1].linlin(-14000,14000,-100,255).asInt)},\z);
-OSCdef(\m1, {|msg| b.sendMsg("/l1m/",msg[1].linlin(-12000,12000,-10,255).asInt)},\z1);
-OSCdef(\m2, {|msg| b.sendMsg("/l2m/",msg[1].linlin(-12000,12000,-10,255).asInt)},\z1);
-OSCdef(\m3, {|msg| b.sendMsg("/l3m/",msg[1].linlin(-12000,12000,-10,255).asInt)},\z1);
-OSCdef(\m4, {|msg| b.sendMsg("/l4m/",msg[1].linlin(-12000,12000,-10,255).asInt)},\z1);
-)
-
-
-
-//OPENING
+//OPENING SECTION
 (
 OSCdef(\xl, {|msg| b.sendMsg("/l1r/",msg[1].linlin(-14000,14000,10,80).asInt)},\x);
 OSCdef(\yl, {|msg| b.sendMsg("/l1g/",msg[1].linlin(-14000,14000,40,255).asInt)},\y);
@@ -101,16 +65,8 @@ OSCdef(\m3, {|msg| b.sendMsg("/l3m/",msg[1].linlin(-12000,12000,-10,200).asInt)}
 OSCdef(\m4, {|msg| b.sendMsg("/l4m/",msg[1].linlin(-12000,12000,-10,200).asInt)},\z1);
 )
 
-/*
 
-THERE NEEDS TO BE STROBING HERE LOL
-
-*/
-
-~fund = 900
-
-
-//Commendation, bright light and low rumble
+//A task to bring the fundamental frequency down to a low rumble as well as stopping all proxies running non-synthesised music from the Sound section
 (
 Task({
 	1.do({
@@ -147,12 +103,8 @@ Task({
 }).start;
 )
 
-//then the tome.
-//the word unknown is repeated, and gradually degraded
 
-
-
-//final words
+//final words, after Charlie has put the mic back on the stand
 
 (
 OSCdef(\xl, {|msg| b.sendMsg("/l1r/",msg[1].linlin(-14000,14000,90,255).asInt)},\x);
@@ -174,6 +126,7 @@ OSCdef(\m4, {|msg| b.sendMsg("/l4m/",msg[1].linlin(-12000,12000,200,255).asInt)}
 )
 
 
+//Set of functions to fade out the lights as Charlie de-suits, with the aim of reaching darkness by the time he has taken the suit off
 (
 OSCdef(\m1,{0});
 OSCdef(\m2,{0});
@@ -181,50 +134,4 @@ OSCdef(\m3,{0});
 OSCdef(\m4,{0});
 //taking off suit
 c.knob9.onChanged = {|val| b.sendMsg("/l1m/", val.linlin(0,127,0,255).asInt); b.sendMsg("/l2m/", val.linlin(0,127,0,255).asInt); b.sendMsg("/l3m/", val.linlin(0,127,0,255).asInt); b.sendMsg("/l4m/", val.linlin(0,127,0,255).asInt);}
-)
-
-
-
-
-
-
-
-
-
-
-b = NetAddr("127.0.0.1", 7700)
-(
-Task({
-	256.do({ arg i;
-		b.sendMsg("/l1m/", i.linlin(0,255,255,0).asInt);
-		b.sendMsg("/l2m/", i.linlin(0,255,255,0).asInt);
-		b.sendMsg("/l3m/", i.linlin(0,255,255,0).asInt);
-		b.sendMsg("/l4m/", i.linlin(0,255,255,0).asInt);
-		0.01.wait;
-	});
-}).start;
-)
-
-
-(
-OSCdef(\xl, {|msg| b.sendMsg("/l1r/",rrand(0,255))},\x);
-OSCdef(\yl, {|msg| b.sendMsg("/l1g/",rrand(0,255))},\y);
-OSCdef(\zl, {|msg| b.sendMsg("/l1b/",rrand(0,255))},\z);
-OSCdef(\x2, {|msg| b.sendMsg("/l2r/",rrand(0,255))},\x);
-OSCdef(\y2, {|msg| b.sendMsg("/l2g/",rrand(0,255))},\y);
-OSCdef(\z2, {|msg| b.sendMsg("/l2b/",rrand(0,255))},\z);
-OSCdef(\x3, {|msg| b.sendMsg("/l3r/",rrand(0,255))},\x);
-OSCdef(\y3, {|msg| b.sendMsg("/l3g/",rrand(0,255))},\y);
-OSCdef(\z3, {|msg| b.sendMsg("/l3b/",rrand(0,255))},\z);
-OSCdef(\x4, {|msg| b.sendMsg("/l4r/",rrand(0,255))},\x);
-OSCdef(\y4, {|msg| b.sendMsg("/l4g/",rrand(0,255))},\y);
-OSCdef(\z4, {|msg| b.sendMsg("/l4b/",rrand(0,255))},\z);
-OSCdef(\m1, {|msg| b.sendMsg("/l1m/",255)},\z1);
-OSCdef(\m2, {|msg| b.sendMsg("/l2m/",255)},\z1);
-OSCdef(\m3, {|msg| b.sendMsg("/l3m/",255)},\z1);
-OSCdef(\m4, {|msg| b.sendMsg("/l4m/",255)},\z1);
-OSCdef(\m1, {|msg| b.sendMsg("/l1s/",rrand(0,255))},\z1);
-OSCdef(\m2, {|msg| b.sendMsg("/l2s/",rrand(0,255))},\z1);
-OSCdef(\m3, {|msg| b.sendMsg("/l3s/",rrand(0,255))},\z1);
-OSCdef(\m4, {|msg| b.sendMsg("/l4s/",rrand(0,255))},\z1);
 )
