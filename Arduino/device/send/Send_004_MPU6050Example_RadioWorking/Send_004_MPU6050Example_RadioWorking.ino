@@ -59,8 +59,8 @@ THE SOFTWARE.
 MPU6050 accelgyro;
 MPU6050 accelgyro2(0x69); // <-- use for AD0 high
 
+//define ints for both accelerometers
 int16_t ax, ay, az;
-
 int16_t ax2, ay2, az2;
 
 // NOTE: the "LL" at the end of the constant is "LongLong" type
@@ -70,20 +70,7 @@ const uint64_t pipe = 0xE8E8F0F0E1LL; // Define the transmit pipe
 /*-----( Declare objects )-----*/
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 /*-----( Declare Variables )-----*/
-int joystick[6];  // 2 element array holding Joystick readings
-
-
-
-// uncomment "OUTPUT_READABLE_ACCELGYRO" if you want to see a tab-separated
-// list of the accel X/Y/Z and then gyro X/Y/Z values in decimal. Easy to read,
-// not so easy to parse, and slow(er) over UART.
-//#define OUTPUT_READABLE_ACCELGYRO
-
-// uncomment "OUTPUT_BINARY_ACCELGYRO" to send all 6 axes of data as 16-bit
-// binary, one right after the other. This is very fast (as fast as possible
-// without compression or data loss), and easy to parse, but impossible to read
-// for a human.
-//#define OUTPUT_BINARY_ACCELGYRO
+int joystick[6];  // 6 element array hold two XYZ accelerometer values
 
 
 #define LED_PIN 13
@@ -157,19 +144,17 @@ void loop() {
     joystick[4] = ay2;
     joystick[5] = az2;
     
-  
+    //write array to the radio sending module, to be picked up by the corresponding recieving node
     radio.write( joystick, sizeof(joystick) );
 
-
-
-        // display tab-separated accel/gyro x/y/z values
-        Serial.print("TESTESTESTESTESTESTESTEST      ");
-        Serial.print(ax); Serial.print(" ");
-        Serial.print(ay); Serial.print(" ");
-        Serial.print(az); Serial.print("   TWO:");
-        Serial.print(ax2); Serial.print(" ");
-        Serial.print(ay2); Serial.print(" ");
-        Serial.print(az2); Serial.println("");
+        // A test to display both accelerometer x/y/z values, only use for debugging
+        // Serial.print("TESTESTESTESTESTESTESTEST      ");
+        // Serial.print(ax); Serial.print(" ");
+        // Serial.print(ay); Serial.print(" ");
+        // Serial.print(az); Serial.print("   TWO:");
+        // Serial.print(ax2); Serial.print(" ");
+        // Serial.print(ay2); Serial.print(" ");
+        // Serial.print(az2); Serial.println("");
 
     // blink LED to indicate activity
     blinkState = !blinkState;
