@@ -1,4 +1,7 @@
-/* YourDuinoStarter Example: nRF24L01 Receive Joystick values
+/* 
+This code is based on the following:
+
+YourDuinoStarter Example: nRF24L01 Receive Joystick values
 
  - WHAT IT DOES: Receives data from another transceiver with
    2 Analog values from a Joystick or 2 Potentiometers
@@ -34,7 +37,7 @@ const uint64_t pipe = 0xE8E8F0F0E1LL; // Define the transmit pipe
 /*-----( Declare objects )-----*/
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 /*-----( Declare Variables )-----*/
-int str[9];  // 2 element array holding Joystick readings
+int str[9];  // 9 Element array to allow for any garbage characters
 
 void setup()   /****** SETUP: RUNS ONCE ******/
 {
@@ -55,9 +58,8 @@ void loop()   /****** LOOP: RUNS CONSTANTLY ******/
 {
 // Dump the payloads until we’ve gotten everything
 // Fetch the payload, and see if this was the last one.
-//format X, Y, Z, Heading, Switch
+//format X, Y, Z, X2, Y2, Z2
   radio.read( str, sizeof(str) );
-      //FORMAT: x-y-z-x2-y2-x-z2-lux-temp-GSR
       
       Serial.print("msg= ");
       Serial.print(str[0]);
