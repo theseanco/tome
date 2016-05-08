@@ -158,21 +158,17 @@ OSCdef(\warpz,{|msg| ~warp3.set(\pos,msg[1].linlin(-16000,16000,0,1.0))},'/z');
 ~warp3.play;
 )
 
-//HAVE A WARP WITH NOISE
+//A Warp with noise, in case of sensor failure
 (
 ~warp1 = {arg amp = 1, posx = 0.5, posy = 0.5, pos = 0.01, rate = 1; Pan2.ar(Warp1.ar(1,d[\tome],LFNoise1.kr(LFNoise1.kr(0.1).range(0.1,1),1).abs,interp:4),posx,amp)};
 ~warp2 = {arg amp = 1, posx = 0.5, posy = 0.5, pos = 0.01, rate = 1; Pan2.ar(Warp1.ar(1,d[\tome],LFNoise1.kr(LFNoise1.kr(0.1).range(0.1,1),1).abs,rate,0.2,interp:4),posx,amp)};
 ~warp3 = {arg amp = 1, posx = 0.5, posy = 0.5, pos = 0.01, rate = 1; Pan2.ar(Warp1.ar(1,d[\tome],LFNoise1.kr(LFNoise1.kr(0.1).range(0.1,1),1).abs,rate,0.2,interp:4),posx,amp)};
 )
-
-
 (
 ~warp1.play;
 ~warp2.stop;
 ~warp3.stop;
 )
-
-
 (
 ~warp1.clear;
 ~warp2.clear;
